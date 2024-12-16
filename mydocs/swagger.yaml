@@ -1,0 +1,231 @@
+openapi: 3.0.0
+info:
+  title: Learn Swagger and Express
+  description: Learning Swagger to write doc for the backend
+  version: 1.1.0
+  contact:
+    email: rajaiswal@juniper
+    url: "https://localhost:4000/api/"
+
+servers:
+  - url: "{protocol}://localhost:4000/api/{version}"
+    description: localhost
+    variables:
+      version:
+        default: v1
+        enum:
+          - v1
+          - v2
+      protocol:
+        default: http
+        enum:
+          - http
+          - https
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+paths:
+  /home:
+    get:
+      tags:  #when we use tag it groups together all api paths with tag 
+            #string irrespective of where they are declared, By default its default
+        - String
+      summary: return a details of home page
+      responses:
+        200:
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "myString"
+        400:
+          description: Bad request
+        500:
+          description: Server not available
+  /object:
+    get:
+      tags:  #when we use tag it groups together all api paths with tag 
+            #string irrespective of where they are declared, By default its default
+        - Object
+      summary: return a course Object
+      responses:
+        200:
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:  #properties will only come when we have type as object
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+        400:
+          description: Bad request
+        500:
+          description: Server not available
+
+  /courses:
+    get:
+      tags:  #when we use tag it groups together all api paths with tag 
+            #string irrespective of where they are declared, By default its default
+        - Arrays
+      summary: return a course details
+      responses:
+        200:
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:  #properties will only come when we have type as object
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    price:
+                      type: number
+        400:
+          description: Bad request
+        500:
+          description: Server not available
+
+  /mycourses/{courseId}:
+    get:
+      tags:  #when we use tag it groups together all api paths with tag 
+            #string irrespective of where they are declared, By default its default
+        - String
+      summary: return a course details based on Id
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          default: 1
+          schema:
+            type: string
+      responses:
+        200:
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:  #properties will only come when we have type as object
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  price:
+                    type: number
+        400:
+          description: Bad request
+        500:
+          description: Server not available
+
+  /addCourse:
+    post:
+      tags:
+        - String
+      summary: adds a new course to existing one
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                name:
+                  type: string
+                price:
+                  type: number
+      responses:
+        200:
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: boolean
+        400:
+          description: Bad request
+        500:
+          description: Server not available
+  /coursequery:
+    get:
+      tags:
+        - String
+      summary: learing about query in get method
+      parameters:
+        - name: location
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [delhi, bangalore, jaipur]
+        - name: device
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [web, mobile]
+      responses:
+        200:
+          description: All good
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  location:
+                    type: string
+                  device:
+                    type: string
+        400:
+          description: Bad request
+        500:
+          description: Server not available
+
+  /courseupload:
+    post:
+      tags:
+        - String
+      summary: uplading the image using expres-fileupload
+      parameters:
+        - in: header
+          name: auth
+      requestBody:
+        content: 
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: All good
+        400:
+          description: Bad request
+        500:
+          description: Server not available
